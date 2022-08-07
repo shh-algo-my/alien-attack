@@ -1,7 +1,6 @@
 from pygame import *
 from random import randint
 
-# ✨(1) import the timing function so that the interpreter doesn’t need to look for this function in the pygame module time, give it a different name ourselves
 from time import time as timer 
 
 # Background music
@@ -10,7 +9,7 @@ mixer.music.load('space.ogg')
 mixer.music.play()
 fire_sound = mixer.Sound('fire.ogg')
 
-# ✨(2) Load images --- ADD ASTEROID!
+# Images
 img_back = "galaxy.jpg" #game background
 img_bullet = "bullet.png" #bullet
 img_hero = "rocket.png" #hero
@@ -41,7 +40,6 @@ max_lost = 10 #how many ships you can lose
 
 goal = 20 #how many ships need to be shot down to win
 
-# ✨(3) ADD LIVES
 life = 3  #lives!
  
 # GameSprite class - inheriting from class Sprite
@@ -108,15 +106,13 @@ for i in range(1, 6):
 
 bullets = sprite.Group()
  
-#------------------------------------#
-# ✨(4) Asteroid sprites
-
+# Asteroids
 asteroids = sprite.Group()
 
 for i in range(1, 3):
    asteroid = Enemy(img_ast, randint(30, win_width - 30), -40, 80, 50, randint(1, 7))
    asteroids.add(asteroid)
-#------------------------------------# 
+
 
 # The "game is over" variable 
 # As soon as it becomes True, all sprites stop working in the main loop
@@ -126,24 +122,18 @@ finish = False
 # The game is reset by the window close button
 run = True 
 
-#------------------------------------#
-#✨(5) Variables - reload, shots fired
-
 # Reload time
 rel_time = False 
  
 # Count shots fired
 num_fire = 0  
-#------------------------------------#
-
-#✨(6) Update the game loop
 
 while run:
-    # "Close" button press event ✅
+    # "Close" button press event 
     for e in event.get():
         if e.type == QUIT:
             run = False
-       #event of pressing the spacebar - the sprite shoots ✅
+       #event of pressing the spacebar - the sprite shoots 
         elif e.type == KEYDOWN:
             if e.key == K_SPACE:
                 # Check how many shots have been fired (151 - 158 : NEW!)
@@ -200,22 +190,16 @@ while run:
             monster = Enemy(img_enemy, randint(80, win_width - 80), -40, 80, 50, randint(1, 5))
             # Adding it to the monster group
             monsters.add(monster)
-
-        #----------------------------#
-        # UPDATE THIS SECTION!
-        # Now with asteroids!
-        #----------------------------#
+            
         if sprite.spritecollide(ship, monsters, False) or sprite.spritecollide(ship, asteroids, False):
             sprite.spritecollide(ship, monsters, True)
             sprite.spritecollide(ship, asteroids, True)
             life = life - 1
-    
-        # NEW losing check!
+   
         if life == 0 or lost >= max_lost:
             finish = True
             window.blit(lose, (200, 200))
  
-       # Same winning check :)
         if score >= goal:
             finish = True
             window.blit(win, (200, 200))
@@ -227,11 +211,7 @@ while run:
     
         text_lose = font2.render("Missed: " + str(lost), 1, (255, 255, 255))
         window.blit(text_lose, (10, 50))
-
-        #-----------------------------#
-        # NEW: LIVES TRACKER!
-        #-----------------------------#
-        # Set a different color depending on the number of lives
+      
         if life == 3:
             life_color = (0, 150, 0)
         if life == 2:
@@ -241,7 +221,7 @@ while run:
     
         text_life = font1.render(str(life), 1, life_color)
         window.blit(text_life, (650, 10))
-        #-----------------------------#
+      
         display.update()
  
     #bonus: automatic restart of the game
